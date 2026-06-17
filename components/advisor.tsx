@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { fadeUp, viewportOnce } from './motion'
 import { CHAT_TOPICS, useChat } from './chat-context'
 
@@ -27,14 +27,6 @@ export function Advisor() {
   const { messages, sendTopic, sendMessage } = useChat()
   const [input, setInput] = useState('')
 
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-    })
-  }, [messages])
-
   return (
       <section id="conseiller" className="relative px-6 py-28">
         <div
@@ -47,11 +39,12 @@ export function Advisor() {
         />
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2">
+
           {/* LEFT */}
           <motion.div
               variants={fadeUp}
               initial="hidden"
-              whileInView="visible"
+              animate="visible"
               viewport={viewportOnce}
           >
             <p className="mb-4 text-xs uppercase tracking-[0.35em] text-gold">
@@ -63,14 +56,13 @@ export function Advisor() {
             </h2>
 
             <p className="mt-5 max-w-md leading-relaxed text-muted-foreground">
-              Un dialogue raffiné pour transformer vos rêves d&apos;histoire en un
-              voyage temporel parfaitement orchestré.
+              Un dialogue raffiné pour transformer vos rêves d&apos;histoire en un voyage temporel parfaitement orchestré.
             </p>
 
             <ol className="mt-10 space-y-6">
               {STEPS.map((step) => (
                   <li key={step.n} className="flex gap-5">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-gold/40 font-mono text-sm text-gold">
+                <span className="flex size-11 items-center justify-center rounded-full border border-gold/40 font-mono text-sm text-gold">
                   {step.n}
                 </span>
 
@@ -79,7 +71,7 @@ export function Advisor() {
                         {step.title}
                       </h3>
 
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      <p className="mt-1 text-sm text-muted-foreground">
                         {step.text}
                       </p>
                     </div>
@@ -92,10 +84,11 @@ export function Advisor() {
           <motion.div
               variants={fadeUp}
               initial="hidden"
-              whileInView="visible"
+              animate="visible"
               viewport={viewportOnce}
           >
             <div className="overflow-hidden rounded-2xl border border-border bg-panel shadow-2xl shadow-black/40">
+
               {/* HEADER */}
               <div className="flex items-center gap-3 border-b border-border bg-panel-2/60 px-5 py-4">
               <span className="flex size-9 items-center justify-center rounded-full border border-gold/50 font-heading text-sm font-semibold text-gold">
@@ -106,10 +99,7 @@ export function Advisor() {
                   <p className="text-sm font-medium text-ivory">
                     Conseiller temporel Æon
                   </p>
-
-                  <p className="text-xs text-muted-foreground">
-                    En ligne
-                  </p>
+                  <p className="text-xs text-muted-foreground">En ligne</p>
                 </div>
               </div>
 
@@ -119,9 +109,7 @@ export function Advisor() {
                     <div
                         key={m.id}
                         className={`flex ${
-                            m.role === 'user'
-                                ? 'justify-end'
-                                : 'justify-start'
+                            m.role === 'user' ? 'justify-end' : 'justify-start'
                         }`}
                     >
                       <div
@@ -135,32 +123,13 @@ export function Advisor() {
                       </div>
                     </div>
                 ))}
-
-                <div ref={messagesEndRef} />
-              </div>
-
-              {/* TOPICS */}
-              <div className="border-t border-border px-5 py-4">
-                <div className="flex flex-wrap gap-2">
-                  {CHAT_TOPICS.map((topic) => (
-                      <button
-                          key={topic.id}
-                          onClick={() => sendTopic(topic.id)}
-                          className="rounded-full border border-border px-3 py-1 text-xs text-ivory transition-colors hover:border-gold hover:text-gold"
-                      >
-                        {topic.label}
-                      </button>
-                  ))}
-                </div>
               </div>
 
               {/* INPUT */}
               <form
                   onSubmit={(e) => {
                     e.preventDefault()
-
                     if (!input.trim()) return
-
                     sendMessage(input)
                     setInput('')
                   }}
@@ -173,13 +142,24 @@ export function Advisor() {
                     className="flex-1 bg-transparent text-sm text-ivory outline-none"
                 />
 
-                <button
-                    type="submit"
-                    className="text-sm text-gold"
-                >
-                  Envoyer
-                </button>
+                <button className="text-sm text-gold">Envoyer</button>
               </form>
+
+              {/* TOPICS */}
+              <div className="border-t border-border px-5 py-4">
+                <div className="flex flex-wrap gap-2">
+                  {CHAT_TOPICS.map((topic) => (
+                      <button
+                          key={topic.id}
+                          onClick={() => sendTopic(topic.id)}
+                          className="rounded-full border border-border px-3 py-1 text-xs text-ivory hover:text-gold"
+                      >
+                        {topic.label}
+                      </button>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </motion.div>
         </div>
