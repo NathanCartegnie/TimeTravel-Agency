@@ -8,6 +8,7 @@ import { Hero } from '@/components/hero'
 import { Eras } from '@/components/eras'
 import { Advisor } from '@/components/advisor'
 import { SiteFooter } from '@/components/site-footer'
+import {VideoShowcase} from "@/components/video-showcase";
 
 export default function Page() {
   return (
@@ -16,6 +17,7 @@ export default function Page() {
         <SiteHeader />
         <main>
           <Hero />
+          <VideoShowcase />
           <Eras />
           <Advisor />
         </main>
